@@ -1,0 +1,21 @@
+def move_crates(stacks, source, dest, num_crates):
+    # Move the specified number of crates from the source stack to the destination stack
+    for _ in range(num_crates):
+    # Remove the top crate from the source stack and add it to the destination stack
+        crate = stacks[source].pop()
+        stacks[dest].append(crate)
+    return stacks
+
+stacks = [['Z', 'N'], ['M', 'C', 'D'], ['P']]
+steps = [
+(1, 2, 1),
+(3, 1, 3),
+(2, 2, 1),
+(1, 1, 2)
+]
+for num_crates, source, dest  in steps:
+    source -= 1
+    dest -= 1
+    stacks = move_crates(stacks, source, dest, num_crates)
+top_crates = [stack[-1] for stack in stacks]
+print(top_crates)
