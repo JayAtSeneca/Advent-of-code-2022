@@ -1,28 +1,28 @@
+import string
+from parse import parse
 
-import re
+a = open('input.txt').read()
 
-def move_crates(stacks, source, dest, num_crates):
-    # Move the specified number of crates from the source stack to the destination stack
-    for _ in range(num_crates):
-    # Remove the top crate from the source stack and add it to the destination stack
-        crate = stacks[source].pop()
-        stacks[dest].append(crate)
-    return stacks
+# Every stack of crates is a list with the lowest one as first element of respective list
+block_list = [[], [], [], [], [], [], [], [], []]
+for line in reversed(a.splitlines()[:8]):
+    j = -1
+    for i in range(1, len(line), 4):
+        j += 1
+        if line[i] in set(string.ascii_uppercase):
+            block_list[j].append(line[i])
 
+for line in a.splitlines()[10:]:
+    crane_work = parse("move {v1} from {v2} to {v3}", line)
+    moves = int(crane_work['v1'])
+    move_from = int(crane_work['v2']) - 1
+    move_to = int(crane_work['v3']) - 1
 
-stacks = [['V', 'N','F','S','M','P','H','J'], ['Q', 'D', 'J','M','L','R','S'], ['B','W','S','C''H','D','Q','N'],['L','C','S','R'],['B','F','P','T','V','M'],['C','N','Q','R','T'],['R','V','G'],['R','L','D','P','S','Z','C'],['F','B','P','G','V','J','S','D']]
-# stacks = [['Z', 'N'], ['M', 'C', 'D'], ['P']]
-steps = []
-with open('input.txt') as f:
-    for _ in range(10):
-        next(f)
-    for line in f:
-        my_tuple = tuple(map(int,re.findall(r'\d+',line)))
-        steps.append(my_tuple)
-    print(steps)
-    for num_crates, source, dest  in steps:
-        source -= 1
-        dest -= 1
-        stacks = move_crates(stacks, source, dest, num_crates)
-    top_crates = [stack[-1] for stack in stacks]
-    print(top_crates)
+    on_crane = block_list[move_from][-moves:]
+    block_list[move_from] = block_list[move_from][:-moves]
+    block_list[move_to].extend(reversed(on_crane))  # Remove the reversed method on on_crane to get part 2 solution
+
+end_str = ''
+for stack in block_list:
+    end_str += str(stack[-1:][0])
+print(end_str)
