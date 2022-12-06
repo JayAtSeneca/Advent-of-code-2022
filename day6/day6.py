@@ -15,3 +15,5 @@ def day_6(x):
                 break
 #part one
 day_6(4)
+#part two
+day_6(14)
